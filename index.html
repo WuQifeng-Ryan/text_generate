@@ -16,7 +16,7 @@
             background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
             color: #333;
             min-height: 100vh;
-            padding: 1%;
+            padding: 0;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -28,8 +28,8 @@
             border-radius: 20px;
             box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
             overflow: hidden;
-            padding: 5%;
-            margin: 5%;
+            padding: 0;
+            margin: 0;
         }
 
         header {
@@ -510,9 +510,9 @@
 
                         </div>
                         <div class="options-grid">
-                            <div> <span></span>名字:</span><input type="text" id="PIC" name="PIC" value=""/></div>
-                            <div> <span>TEL:</span><input type="text" id="PICtel" name="PICtel" value=""/></div>
-                            <div> <span>職業:</span><input type="text" id="PICjob" name="PICjob" value=""/></div>
+                            <div><span></span>名字:</span><input type="text" id="PIC" name="PIC" value=""/></div>
+                            <div><span>TEL:</span><input type="text" id="PICtel" name="PICtel" value=""/></div>
+                            <div><span>職業:</span><input type="text" id="PICjob" name="PICjob" value=""/></div>
                         </div>
                     </div>
                 </div>
@@ -539,6 +539,13 @@
                     <span>重置选项</span>
                 </button>
             </div>
+        </div>
+    </div>
+    <!-- 固定下方的最終輸出 -->
+    <div class="output-container">
+        <div class="result-display">
+            <h3>生成的文本</h3>
+            <div id="generatedText1"></div>
         </div>
     </div>
 </form>
@@ -576,182 +583,213 @@
     const form = document.getElementById("container");
     //document.addEventListener('DOMContentLoaded', function () {
 
-        const generateBtn = document.getElementById('generateBtn');
-        const saveBtn = document.getElementById('saveBtn');
-        const resetBtn = document.getElementById('resetBtn');
-        const generatedText = document.getElementById('generatedText');
-        generateBtn.addEventListener('click',updateform);
-        // 生成文本函数
-        function updateform() {
-            // 获取所有选中的选项
-            const family = getSelectedValues('family');
-            const Living = document.getElementById('Living');
-            const decease = getSelectedValues('decease');
-            const medicine = getSelectedValues('medicine');
-            const activity = getSelectedValues('activity');
-            const food = getSelectedValues('food');
-            const sex = getSelectedValues('sex');
-            // 构建文本
+    const generateBtn = document.getElementById('generateBtn');
+    const saveBtn = document.getElementById('saveBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const generatedText = document.getElementById('generatedText');
+    const generatedText1 = document.getElementById('generatedText1');
+    generateBtn.addEventListener('click', updateform);
 
-            let text = '';
-            if (RNInput.value.length > 0) {
-                text += 'KT RN ' + RNInput.value + '\n';
-            } else {
-                text += 'KT RN :Nil\n';
-            }
-            if (locationInput.value.length > 0) {
-                text += '地址：' + locationInput.value + '\n';
-            } else {
-                text += '地址：Nil\n';
-            }
-            if (correctdateInput.value.length > 0 || correcttimeInput.value.length > 0) {
-                text += '妥當時間：' + correctdateInput.value + ' ' + correcttimeInput.value + 'hrs\n';
-            } else {
-                text += '妥當時間：Nil\n';
-            }
-            if (incorrectdateInput.value.length > 0 || incorrecttimeInput.value.length > 0) {
-                text += '不精神時間：' + incorrectdateInput.value + ' ' + incorrecttimeInput.value + 'hrs\n';
-            } else {
-                text += '不精神時間：Nil\n';
-            }
-            if (certifieddateInput.value.length > 0 || certifiedtimeInput.value.length > 0) {
-                text += '死亡時間：' + certifieddateInput.value + ' ' + certifiedtimeInput.value + 'hrs\n';
-            } else {
-                text += '死亡時間： Nil\n';
-            }
-            if (doctorInput.value.length > 0) {
-                text += '由醫生 Dr.' + doctorInput.value + '\n';
-            } else {
-                text += '由醫生 Dr. : Nil\n';
-            }
-            if (ambInput.value.length > 0) {
-                text += '救護車: A ' + ambInput.value + '\n\n\n\n';
-            } else {
-                text += '救護車: A Nil\n\n\n\n';
-            }
+    // 生成文本函数
+    function updateform() {
+        // 获取所有选中的选项
+        const family = getSelectedValues('family');
+        const Living = document.getElementById('Living');
+        const decease = getSelectedValues('decease');
+        const medicine = getSelectedValues('medicine');
+        const activity = getSelectedValues('activity');
+        const food = getSelectedValues('food');
+        const sex = getSelectedValues('sex');
+        // 构建文本
 
-            if (family.length > 0 || familyInput.value.length > 0) {
-                text += '一家' + familyInput.value + '口:(' + family.join(',') + ')\n';
-            } else {
-                text += '一家幾口：Nil\n';
-            }
-            if (Living.value.length > 0) {
-                text += '入住年份：' + Living.value + '\n';
-            } else {
-                text += '入住年份：Nil\n';
-            }
-            if (Hospital.value.length > 0) {
-                text += '醫院/老人院床位：' + Hospital.value + '\n';
-            } else {
-                text += '醫院/老人院床位：Nil\n\n';
-            }
-            if (decease.length > 0) {
-                text += '病歷(年份)：' + decease.join(',') + ',' + deceaseInput.value + '\n';
-            } else {
-                text += '病歷(年份)：Nil\n';
-            }
-            if (medicine.length > 0) {
-                text += '長期服用藥物：' + medicine.join(',') + ',' + medicineInput.value + '\n';
-            } else {
-                text += '長期服用藥物：Nil\n';
-            }
-            if (MTdateInput.value.length > 0 || MTInput.value.length > 0) {
-                text += '上次覆診日期地點：' + MTdateInput.value + MTInput.value + '\n';
-            } else {
-                text += '上次覆診日期地點：Nil\n';
-            }
-            if (HMTdateInput.value.length > 0 || HMTInput.value.length > 0) {
-                text += '最近入院日期原因：' + HMTdateInput.value + HMTInput.value + '\n';
-            } else {
-                text += '最近入院日期原因：Nil\n';
-            }
-            if (surgerydateInput.value.length > 0 || surgeryInput.value.length > 0) {
-                text += '手術種類(年份)：' + surgerydateInput.value + surgeryInput.value + '\n';
-            } else {
-                text += '手術種類(年份)：Nil\n';
-            }
-            if (activity.length > 0) {
-                text += '行動自如/坐輪椅/長期臥床：' + activity.join(',') + '\n';
-            } else {
-                text += '行動自如/坐輪椅/長期臥床：Nil\n';
-            }
-            if (food.length > 0) {
-                text += '食固體/流質食物：' + food.join(',') + '\n';
-            } else {
-                text += '食固體/流質食物：Nil\n';
-            }
-            if (insuranceInput.value.length > 0) {
-                text += '保險：' + insuranceInput.value + '\n';
-            } else {
-                text += '保險：Nil\n';
-            }
-            if (allowanceInput.value.length > 0) {
-                text += '綜援：' + allowanceInput.value + '\n';
-            } else {
-                text += '綜援：Nil\n\n\n\n認領遺體：';
-            }
-            if (PICInput.value.length > 0 || sex.length > 0 || PICjobInput.value.length > 0 || PICtelInput.value.length > 0) {
-                text += '家屬：' + sex.join(',') + '/' + PICInput.value + '\n';
-                text += '職業：' +PICjobInput.value + '\n';
-                text += 'Tel：' +PICtelInput.value + '\n';
-            } else {
-                text += '家屬：Nil\n';
-            }
+        let text = '';
+        if (RNInput.value.length > 0) {
+            text += 'KT RN ' + RNInput.value + '\n';
+        } else {
+            text += 'KT RN :Nil\n';
+        }
+        if (locationInput.value.length > 0) {
+            text += '地址：' + locationInput.value + '\n';
+        } else {
+            text += '地址：Nil\n';
+        }
+        if (correctdateInput.value.length > 0 || correcttimeInput.value.length > 0) {
+            text += '妥當時間：' + correctdateInput.value + ' ' + correcttimeInput.value + 'hrs\n';
+        } else {
+            text += '妥當時間：Nil\n';
+        }
+        if (incorrectdateInput.value.length > 0 || incorrecttimeInput.value.length > 0) {
+            text += '不精神時間：' + incorrectdateInput.value + ' ' + incorrecttimeInput.value + 'hrs\n';
+        } else {
+            text += '不精神時間：Nil\n';
+        }
+        if (certifieddateInput.value.length > 0 || certifiedtimeInput.value.length > 0) {
+            text += '死亡時間：' + certifieddateInput.value + ' ' + certifiedtimeInput.value + 'hrs\n';
+        } else {
+            text += '死亡時間： Nil\n';
+        }
+        if (doctorInput.value.length > 0) {
+            text += '由醫生 Dr.' + doctorInput.value + '\n';
+        } else {
+            text += '由醫生 Dr. : Nil\n';
+        }
+        if (ambInput.value.length > 0) {
+            text += '救護車: A ' + ambInput.value + '\n\n\n\n';
+        } else {
+            text += '救護車: A Nil\n\n\n\n';
+        }
+
+        if (family.length > 0 || familyInput.value.length > 0) {
+            text += '一家' + familyInput.value + '口:(' + family.join(',') + ')\n';
+        } else {
+            text += '一家幾口：Nil\n';
+        }
+        if (Living.value.length > 0) {
+            text += '入住年份：' + Living.value + '\n';
+        } else {
+            text += '入住年份：Nil\n';
+        }
+        if (Hospital.value.length > 0) {
+            text += '醫院/老人院床位：' + Hospital.value + '\n';
+        } else {
+            text += '醫院/老人院床位：Nil\n\n';
+        }
+        if (decease.length > 0) {
+            text += '病歷(年份)：' + decease.join(',') + ',' + deceaseInput.value + '\n';
+        } else {
+            text += '病歷(年份)：Nil\n';
+        }
+        if (medicine.length > 0) {
+            text += '長期服用藥物：' + medicine.join(',') + ',' + medicineInput.value + '\n';
+        } else {
+            text += '長期服用藥物：Nil\n';
+        }
+        if (MTdateInput.value.length > 0 || MTInput.value.length > 0) {
+            text += '上次覆診日期地點：' + MTdateInput.value + MTInput.value + '\n';
+        } else {
+            text += '上次覆診日期地點：Nil\n';
+        }
+        if (HMTdateInput.value.length > 0 || HMTInput.value.length > 0) {
+            text += '最近入院日期原因：' + HMTdateInput.value + HMTInput.value + '\n';
+        } else {
+            text += '最近入院日期原因：Nil\n';
+        }
+        if (surgerydateInput.value.length > 0 || surgeryInput.value.length > 0) {
+            text += '手術種類(年份)：' + surgerydateInput.value + surgeryInput.value + '\n';
+        } else {
+            text += '手術種類(年份)：Nil\n';
+        }
+        if (activity.length > 0) {
+            text += '行動自如/坐輪椅/長期臥床：' + activity.join(',') + '\n';
+        } else {
+            text += '行動自如/坐輪椅/長期臥床：Nil\n';
+        }
+        if (food.length > 0) {
+            text += '食固體/流質食物：' + food.join(',') + '\n';
+        } else {
+            text += '食固體/流質食物：Nil\n';
+        }
+        if (insuranceInput.value.length > 0) {
+            text += '保險：' + insuranceInput.value + '\n';
+        } else {
+            text += '保險：Nil\n';
+        }
+        if (allowanceInput.value.length > 0) {
+            text += '綜援：' + allowanceInput.value + '\n';
+        } else {
+            text += '綜援：Nil\n\n\n\n認領遺體：';
+        }
+        if (PICInput.value.length > 0 || sex.length > 0 || PICjobInput.value.length > 0 || PICtelInput.value.length > 0) {
+            text += '家屬：' + sex.join(',') + '/' + PICInput.value + '\n';
+            text += '職業：' + PICjobInput.value + '\n';
+            text += 'Tel：' + PICtelInput.value + '\n';
+        } else {
+            text += '家屬：Nil\n';
+        }
+        //alert(text);
+        if (text === '') {
+            generatedText.textContent = 'error';
+            generatedText.style.color = '#ff416c';
+        } else {
             //alert(text);
-            if (text === '') {
-                generatedText.textContent = 'error';
-                generatedText.style.color = '#ff416c';
-            } else {
-                //alert(text);
-                generatedText.textContent = text;
-                generatedText.style.color = '#444';
-            }
+            generatedText.textContent = text;
+            generatedText.style.color = '#444';
+            const tgeneratedText = text;
+            generatedText1.innerHTML = `
+<div>KT RN :${RNInput.value.length ? RNInput.value : "Nil"}</div>
+<div>地址：${locationInput.value.length ? locationInput.value : "Nil"}</div>
+<div>妥當時間：${correctdateInput.value.length ? correctdateInput.value : ""},${correcttimeInput.value.length ? correcttimeInput.value : "Nil"}hrs</div>
+<div>不精神時間：${incorrectdateInput.value.length ? incorrectdateInput.value : ""},${incorrecttimeInput.value.length ? incorrecttimeInput.value : "Nil"}hrs</div>
+<div>死亡時間：${certifieddateInput.value.length ? certifieddateInput.value : ""},${certifiedtimeInput.value.length ? certifiedtimeInput.value : "Nil"}hrs</div>
+<div>由醫生 Dr. : ${doctorInput.value.length ? doctorInput.value : "Nil"}</div>
+<div>救護車: A ${ambInput.value.length ? ambInput.value : "Nil"}</div>
+<h1></h1>
+<h1></h1>
+<h1></h1>
+<div>一家幾口：${family},${familyInput.value.length ? familyInput.value : ""}</div>
+<div>入住年份：${Living.value.length ? Living.value : "Nil"}</div>
+<div>醫院/老人院床位：${Hospital.value.length ? Hospital.value : "Nil"}</div>
+<div>病歷(年份)：${decease},${deceaseInput.value.length ? deceaseInput.value : "Nil"}</div>
+<div>長期服用藥物：${medicine},${medicineInput.value.length ? medicineInput.value : "Nil"}</div>
+<div>上次覆診日期地點：${MTInput.value.length ? MTInput.value : ""},${MTdateInput.value.length ? MTdateInput.value : "Nil"}</div>
+<div>最近入院日期原因：${HMTInput.value.length ? HMTInput.value : ""},${HMTdateInput.value.length ? HMTdateInput.value : "Nil"}</div>
+<div>手術種類(年份)：${surgerydateInput.value.length ? surgerydateInput.value : ""},${surgeryInput.value.length ? surgeryInput.value : "Nil"}</div>
+<div>行動自如/坐輪椅/長期臥床：長期臥床: ${activity}</div>
+<div>食固體/流質食物：${food}</div>
+<div>保險：${insuranceInput.value.length ? insuranceInput.value : "Nil"}</div>
+<div>綜援：${allowanceInput.value.length ? allowanceInput.value : "Nil"}</div><h1></h1><h1></h1><h1></h1>
+<div>認領遺體：家屬：${sex}/${PICInput.value.length ? PICInput.value : "Nil"}</div>
+<div>職業：${PICjobInput.value.length ? PICjobInput.value : "Nil"}</div>
+<div>TEL：${PICtelInput.value.length ? PICtelInput.value : "Nil"}</div>
+`;
 
         }
 
-        // 保存文本函数
-        saveBtn.addEventListener('click', function () {
-            const text = generatedText.textContent;
-            if (text === '请选择选项后点击"生成文本"按钮' || text === '请至少选择一个选项' || text === '') {
-                alert('请先生成有效的文本内容');
-                return;
-            }
+    }
 
-            const blob = new Blob([text], {type: 'text/plain;charset=utf-8'});
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'custom_text.txt';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-
-            // 显示保存成功消息
-            const originalText = generatedText.textContent;
-            generatedText.textContent = '文本已保存为 custom_text.txt';
-            generatedText.style.color = '#00b09b';
-
-            setTimeout(() => {
-                generatedText.textContent = originalText;
-                generatedText.style.color = '#444';
-            }, 1000);
-        });
-//alert('text');
-        // 重置选项函数
-        resetBtn.addEventListener('click', function () {
-            document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
-                checkbox.checked = false;
-            });
-            generatedText.textContent = '请选择选项后点击"生成文本"按钮';
-            generatedText.style.color = '#777';
-        });
-
-        // 辅助函数：获取选中的值
-        function getSelectedValues(name) {
-            const checkboxes = document.querySelectorAll(`input[name="${name}"]:checked`);
-            return Array.from(checkboxes).map(cb => cb.value);
+    // 保存文本函数
+    saveBtn.addEventListener('click', function () {
+        const text = generatedText.textContent;
+        if (text === '请选择选项后点击"生成文本"按钮' || text === '请至少选择一个选项' || text === '') {
+            alert('请先生成有效的文本内容');
+            return;
         }
+
+        const blob = new Blob([text], {type: 'text/plain;charset=utf-8'});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'custom_text.txt';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+
+        // 显示保存成功消息
+        const originalText = generatedText.textContent;
+        generatedText.textContent = '文本已保存为 custom_text.txt';
+        generatedText.style.color = '#00b09b';
+
+        setTimeout(() => {
+            generatedText.textContent = originalText;
+            generatedText.style.color = '#444';
+        }, 1000);
+    });
+    //alert('text');
+    // 重置选项函数
+    resetBtn.addEventListener('click', function () {
+        document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+            checkbox.checked = false;
+        });
+        generatedText.textContent = '请选择选项后点击"生成文本"按钮';
+        generatedText.style.color = '#777';
+    });
+
+    // 辅助函数：获取选中的值
+    function getSelectedValues(name) {
+        const checkboxes = document.querySelectorAll(`input[name="${name}"]:checked`);
+        return Array.from(checkboxes).map(cb => cb.value);
+    }
 
     // 為時間字串加上指定分鐘 (24 小時格式)
     const addMinutesToTime = (timeStr, minutesToAdd) => {
@@ -778,12 +816,13 @@
         certifiedtimeInput.value = `${hours}:${minutes}`;
     };
 
-        // 防止表單提交導致頁面重整
+    // 防止表單提交導致頁面重整
     form.addEventListener("submit", e => e.preventDefault());
     // 表單輸入時即時更新
     form.addEventListener("input", updateform);
     setTodayDate();
-      setCurrentTime();
+    setCurrentTime();
 </script>
 </body>
 </html>
+
